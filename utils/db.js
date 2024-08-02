@@ -1,38 +1,25 @@
 const { MongoClient } = require('mongodb');
 
 class DBClient {
-  constructor () {
-    this.ready = true;
-    this.host = process.env.DB_HOST;
-    this.port = process.env.DB_PORT;
-    this.database = process.env.DB_DATABASE;
+  constructor() {
+    this.ready = false;
+    this.host = process.env.DB_HOST || 'localhost';
+    this.port = process.env.DB_PORT || 27017;
+    this.database = process.env.DB_DATABASE || 'files_manager';
 
-    if (!process.env.DB_HOST) {
-      this.host = 'localhost';
+    this.url = `mongodb://${this.host}:${this.port}`;
+    this.connect();
+  }
+
+  async connect() {
+    try {
+      const client = await MongoClient.connect(this.url);
+      this.db = client.db(this.database);
+      this.ready = true;
+    } catch (err) {
+      this.ready = false;
+      console.error('MongoDB connection error:', err);
     }
-    if (!process.env.DB_PORT) {
-      this.port = 27017;
-    }
-    if (!process.env.DB_DATABASE) {
-      this.database = 'files_manager';
-    }
-
-   this.url = `mongodb://${this.host}:${this.port}`;
-
-   MongoClient.connect(this.url,{useUnifiedTopology: true},(err, client) => {
- 
-    if (err) {
-      this.ready = false
-      console.log("i am goody ")
-      return console.log(err)
-    }
-
-    console.log("Ahmed")
-    this.db = client.db(`${this.database}`)
-    console.log(this.userCollection)
-    console.log(`MongoDB Connected: ${this.url}`)
-
-   });
   }
 
   isAlive() {
@@ -40,15 +27,21 @@ class DBClient {
   }
 
   async nbUsers() {
-     this.usersCollection = this.db.collection('users');
-     const number_users = await this.usersCollection.countDocuments();
-     return number_users;
+    if (!this.ready) {
+      throw new Error('Database not connected');
+    }
+    const usersCollection = this.db.collection('users');
+    const numberUsers = await usersCollection.countDocuments();
+    return numberUsers;
   }
 
   async nbFiles() {
-    this.filesCollection = this.db.collection('files');
-    const number_files = await this.filesCollection.countDocuments();
-    return number_files;
+    if (!this.ready) {
+      throw new Error('Database not connected');
+    }
+    const filesCollection = this.db.collection('files');
+    const numberFiles = await filesCollection.countDocuments();
+    return numberFiles;
   }
 }
 
