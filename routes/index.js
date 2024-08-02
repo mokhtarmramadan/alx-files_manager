@@ -29,13 +29,13 @@ function controllerRouting(app) {
   });
 
   router.get('/disconnect', (req, res) => {
-    AuthController.getDisconnect(req, res);
+    AuthController.getDisconnect(res, req.headers);
   });
-/*
+
   router.get('/users/me', (req, res) => {
-    UserController.getMe(req, res);
-  }
- */
+    UsersController.getMe(req, res);
+  });
+
 
 }
 export default controllerRouting;
