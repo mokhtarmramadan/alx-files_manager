@@ -1,5 +1,6 @@
 import express from 'express';
 import AppController from '../controllers/AppController';
+import UsersController from '../controllers/UsersController';
 
 
 function controllerRouting(app) {
@@ -15,6 +16,11 @@ function controllerRouting(app) {
   router.get('/stats', (req, res) => {
     // returns number of users and files in the DB
     AppController.getStats(req, res);
+  });
+
+  router.post('/users', (req, res) => {
+    // Adds a new user
+    UsersController.postNew(req, res);
   });
 }
 export default controllerRouting;
