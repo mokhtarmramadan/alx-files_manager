@@ -21,6 +21,7 @@ class AuthController {
     }
 
     let token = headers[name_token].split(" ");
+    // eslint-disable-next-line
     let decodedToken = Buffer.from(token[1], 'base64').toString('utf-8');
     let user = decodedToken.split(":");
     let email = user[0];
