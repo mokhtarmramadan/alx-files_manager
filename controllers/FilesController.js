@@ -79,10 +79,12 @@ class FilesController {
       const filePath = process.env.FOLDER_PATH || '/tmp/files_manager';
       const fileName = `${filePath}/${uuidv4()}`;
       const buff = Buffer.from(data, 'base64');
+      // const storeThis = buff.toString('utf-8');
       try {
         try {
           await fs.mkdir(filePath);
         } catch (error) {
+        // pass. Error raised when file already exists
         }
         await fs.writeFile(fileName, buff, 'utf-8');
       } catch (error) {
@@ -175,6 +177,7 @@ class FilesController {
           delete tmpFile.localPath;
           return tmpFile;
         });
+        // console.log(final);
         return response.status(200).json(final);
       }
       console.log('Error occured');
