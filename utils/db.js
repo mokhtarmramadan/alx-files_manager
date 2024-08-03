@@ -20,6 +20,8 @@ class DBClient {
       const client = await MongoClient.connect(this.url);
       this.db = client.db(this.database);
       this.ready = true;
+      this.usersCollection = this.db.collection('users');
+      this.filesCollection = this.db.collection('files');
     } catch (err) {
       this.ready = false;
       console.error('MongoDB connection error:', err);
