@@ -1,10 +1,14 @@
+// eslint-disable-next-line
 const { MongoClient } = require('mongodb');
 
 class DBClient {
   constructor() {
     this.ready = false;
+    // eslint-disable-next-line
     this.host = process.env.DB_HOST || 'localhost';
+    // eslint-disable-next-line
     this.port = process.env.DB_PORT || 27017;
+    // eslint-disable-next-line
     this.database = process.env.DB_DATABASE || 'files_manager';
 
     this.url = `mongodb://${this.host}:${this.port}`;
